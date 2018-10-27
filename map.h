@@ -21,7 +21,7 @@ public:
     void drawRoom(const Room&);
     void addPaths();
     std::vector<Coordinates> pathfind(unsigned int, unsigned int) const;
-    std::vector<Coordinates> buildpath(Coordinates*) const;
+    std::vector<Coordinates> buildpath(Coordinates,Coordinates*) const;
     char* getPixmapExcluding(unsigned int, unsigned int) const;
     int getDimX() const;
     int getDimY() const;

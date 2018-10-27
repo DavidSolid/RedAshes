@@ -121,9 +121,9 @@ std::vector<Coordinates> Map::pathfind(unsigned int start,unsigned int goal) con
     while(frontier.size()){
         Coordinates current=frontier.begin()->second;
         if(current==cgoal){
-            out=buildpath(track);
-            //delete before return;
-            //return /*buil path*/;
+            out=buildpath(current,track);
+            delete [] field; delete [] track; delete [] g;
+            return out;
         }
         //
         checked.push_back(frontier.begin()->second);
@@ -172,7 +172,15 @@ std::vector<Coordinates> Map::pathfind(unsigned int start,unsigned int goal) con
     return out;
 }
 
-std::vector<Coordinates> Map::buildpath(Coordinates*) const{}//todo
+std::vector<Coordinates> Map::buildpath(Coordinates current,Coordinates* trace) const{//tocheck
+    std::vector<Coordinates> out;
+    Coordinates ancestor=trace[x*current.getY()+current.getX()];
+    if(ancestor!=Coordinates(-1,-1)){
+        out=buildpath(ancestor,trace);
+    }
+    out.push_back(current);
+    return out;
+}
 
 char* Map::getPixmapExcluding(unsigned int first,unsigned int last) const{
     char* npix=new char[x*y];
