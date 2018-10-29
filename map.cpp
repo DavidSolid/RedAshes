@@ -85,12 +85,16 @@ void Map::drawRoom(const Room& todraw){
 
 void Map::addPaths(){
     std::vector<bool> trace(areas.size(),false);
-    for(unsigned int i=0;i<areas.size();i++){
+    unsigned int i=0;
+    bool roomleft=true;
+    while(roomleft){
         Coordinates croom=areas[i]->getCenter();
         unsigned int minroom=i;
         int mindistance=INT_MAX;
+        roomleft=false;
         for(unsigned int j=0;j<areas.size();j++){
             if(i!=j && !trace[j]){
+                roomleft=true;
                 int cdist=croom.distance(areas[j]->getCenter());
                 if(cdist<mindistance){
                     minroom=j;
@@ -98,8 +102,17 @@ void Map::addPaths(){
                 }
             }
         }
-        //routing algorithm
-        trace[minroom]=true;
+        if(roomleft){
+            std::vector<Coordinates> path=pathfind(i,minroom);
+            for(Coordinates c:path){
+                if(pixmap[x*c.getY()+c.getX()]!='-'){
+                    pixmap[x*c.getY()+c.getX()]='=';
+                }
+            }
+            trace[minroom]=true;
+            i=minroom;
+        }
+        else{}
     }
 }
 
@@ -192,7 +205,7 @@ char* Map::getPixmapExcluding(unsigned int first,unsigned int last) const{
     Room* erasing=vfirst;
     while(erasing){
         for(int i=0;i<erasing->getLengthY();i++)
-            for(int j=0;j<erasing->getLengthX();i++)
+            for(int j=0;j<erasing->getLengthX();j++)
                 npix[erasing->getVertex().getX()+j+(erasing->getVertex().getY()+i)*x]='0';
         erasing=(erasing==vfirst)?vlast:nullptr;
     }

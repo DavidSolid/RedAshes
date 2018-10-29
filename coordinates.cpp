@@ -15,6 +15,10 @@ bool Coordinates::operator==(const Coordinates& c) const{
     return x==c.x && y==c.y;
 }
 
+bool Coordinates::operator!=(const Coordinates& c) const{
+    return x!=c.x || y!=c.y;
+}
+
 Coordinates Coordinates::neighbour(int p) const{
     Coordinates out;
     switch(p){

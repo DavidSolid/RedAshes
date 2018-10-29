@@ -10,5 +10,6 @@ public:
     Coordinates neighbour(int=0) const;
     int distance(const Coordinates&) const;
     bool operator==(const Coordinates&) const;
+    bool operator!=(const Coordinates&) const;
 };
 #endif
